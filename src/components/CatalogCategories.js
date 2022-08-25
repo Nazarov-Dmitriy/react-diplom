@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useGetCategoriesQuery } from "../../Store/API/customApi";
-import { addId, hiddenButtonLoadMore } from "../../Store/mainSlice";
+import { useGetCategoriesQuery } from "../Store/API/customApi";
+import { addId, hiddenButtonLoadMore } from "../Store/catalogSlice";
 import { useDispatch } from "react-redux";
 
 export default function CatalogCategories() {

@@ -1,7 +1,9 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const customApi = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:7070/api/" }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: "http://localhost:7070/api/",
+  }),
   endpoints: (builder) => ({
     getTopSales: builder.query({
       query: () => ({
@@ -10,10 +12,15 @@ export const customApi = createApi({
     }),
     getCategories: builder.query({
       query: () => ({
-        url: `http://localhost:7070/api/categories`,
+        url: `categories`,
       }),
     }),
     getCatalogItems: builder.query({
+      query: (url) => ({
+        url: url,
+      }),
+    }),
+    getSearchItems: builder.query({
       query: (url) => ({
         url: url,
       }),
@@ -25,4 +32,5 @@ export const {
   useGetTopSalesQuery,
   useGetCategoriesQuery,
   useGetCatalogItemsQuery,
+  useGetSearchItemsQuery,
 } = customApi;

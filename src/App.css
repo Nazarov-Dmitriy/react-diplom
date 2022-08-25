@@ -346,3 +346,9 @@ h2,
   background-color: #727e86;
   border-color: #727e86;
 }
+
+.notFound {
+  font-size: 3rem;
+  color: #727e86;
+  margin: 0 auto;
+}

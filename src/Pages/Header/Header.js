@@ -1,15 +1,52 @@
-import React from "react";
+import React, { createRef } from "react";
 import { Link } from "react-router-dom";
-import { cancelDoubleLoading,addUrlCatalog,addId } from "../../Store/mainSlice";
-import { useDispatch } from "react-redux";
+import {
+  cancelDoubleLoading,
+  addUrlCatalog,
+  addId,
+} from "../../Store/catalogSlice";
+import {
+  searchHeaderFlag,
+  search,
+  addInputHeader,
+  addSearchFocusFlag,
+} from "../../Store/searchSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export default function Header() {
   const dispatch = useDispatch();
-
   const handleCancelDoubleLoading = () => {
     dispatch(cancelDoubleLoading(true));
-    dispatch(addUrlCatalog('http://localhost:7070/api/items'));
-    dispatch(addId('All'));
+    dispatch(addUrlCatalog("http://localhost:7070/api/items"));
+    dispatch(addId("All"));
+  };
+  const { searchHeader, inputHeader } = useSelector(search);
+  const navigate = useNavigate();
+  const ref = createRef();
+  const refInput = createRef();
+
+  const handleShowSearch = (e) => {
+    ref.current.classList.remove("invisible");
+    refInput.current.focus();
+    dispatch(searchHeaderFlag(true));
+
+    if (inputHeader.trim() !== "" && searchHeader) {
+      ref.current.classList.add("invisible");
+      navigate(`/catalog`);
+      e.target.parentElement.parentElement.children[1][0].value = "";
+      dispatch(addSearchFocusFlag(true));
+    }
+  };
+
+  const hiddenSeacrh = (e) => {
+    if (e.target.value === "") {
+      ref.current.classList.add("invisible");
+    }
+  };
+
+  const handleChange = (e) => {
+    dispatch(addInputHeader(e.target.value));
   };
 
   return (
@@ -72,6 +109,7 @@ export default function Header() {
                   <div
                     data-id="search-expander"
                     className="header-controls-pic header-controls-search"
+                    onClick={handleShowSearch}
                   ></div>
                   {/* Do programmatic navigation on click to /cart.html  */}
                   <div className="header-controls-pic header-controls-cart">
@@ -80,10 +118,22 @@ export default function Header() {
                   </div>
                 </div>
                 <form
+                  ref={ref}
                   data-id="search-form"
                   className="header-controls-search-form form-inline invisible"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                  }}
                 >
-                  <input className="form-control" placeholder="Поиск" />
+                  <input
+                    ref={refInput}
+                    className="form-control"
+                    placeholder="Поиск"
+                    onChange={handleChange}
+                    onBlur={(e) => {
+                      hiddenSeacrh(e);
+                    }}
+                  />
                 </form>
               </div>
             </div>

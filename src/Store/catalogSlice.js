@@ -8,10 +8,13 @@ const initialState = {
   changeId: false,
   hiddenButtonLoadMore: false,
   cancelDoubleLoading: false,
+  data: [],
+  loadCategory: "",
+  count: "0",
 };
 
-export const mainSlice = createSlice({
-  name: 'mainSlice',
+export const catalogSlice = createSlice({
+  name: 'catalogSlice',
   initialState,
   reducers: {
     addId: (state, action) => {
@@ -19,9 +22,8 @@ export const mainSlice = createSlice({
         state.changeId = true;
       }
       state.id = action.payload;
-    },
-    removeChangeId: (state) => {
-      state.changeId = false;
+      state.count = 0;
+      state.loadCategory = '';
     },
     addUrlCatalog: (state, action) => {
       state.url = action.payload;
@@ -32,6 +34,22 @@ export const mainSlice = createSlice({
     cancelDoubleLoading: (state, action) => {
       state.cancelDoubleLoading = action.payload;
     },
+    addData: (state, action) => {
+      if (state.id !== state.loadCategory) {
+        state.data = ([...action.payload]);
+      } else {
+        state.data = ([...state.data, ...action.payload]);
+      }
+    },
+    loadMoreItems: (state) => {
+      if (state.loadCategory !== state.id || state.changeId) {
+        state.changeId = false;
+        state.loadCategory = state.id
+        state.count = 6
+      } else {
+        state.count = state.count + 6
+      }
+    }
   },
 });
 
@@ -39,14 +57,15 @@ export const mainSlice = createSlice({
 export const {
   addId,
   addUrlCatalog,
-  removeChangeId,
   hiddenButtonLoadMore,
   isLoadingCategory,
   isLoadingCatalog,
-  cancelDoubleLoading
-} = mainSlice.actions;
+  cancelDoubleLoading,
+  addData,
+  loadMoreItems
+} = catalogSlice.actions;
 
 export const selectId = (state) => state;
 
 
-export default mainSlice.reducer;
+export default catalogSlice.reducer;

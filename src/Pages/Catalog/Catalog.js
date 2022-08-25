@@ -1,5 +1,7 @@
 import React from "react";
-import MainCatalog from "../Main/MainCatalog";
+import CatalogCategories from "../../components/CatalogCategories";
+import ListCatalog from "../../components/ListCatalog";
+import LoadItemsMoreCatalog from "../../components/LoadItemsMoreCatalog";
 import FormSeach from "./FormSeach";
 
 export default function Catalog() {
@@ -18,7 +20,9 @@ export default function Catalog() {
           <section className="catalog">
             <h2 className="text-center">Каталог</h2>           
             <FormSeach />
-            <MainCatalog />
+            <CatalogCategories />
+            <ListCatalog />
+            <LoadItemsMoreCatalog />
           </section>
         </div>
       </div>

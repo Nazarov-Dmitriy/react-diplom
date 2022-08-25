@@ -1,6 +1,8 @@
 import React from "react";
 import TopSales from "./TopSales";
-import MainCatalog from "./MainCatalog";
+import CatalogCategories from "../../components/CatalogCategories";
+import ListCatalog from "../../components/ListCatalog";
+import LoadItemsMoreCatalog from "../../components/LoadItemsMoreCatalog";
 
 export default function Main() {
   return (
@@ -18,7 +20,9 @@ export default function Main() {
           <TopSales />
           <section className="catalog">
             <h2 className="text-center"> Каталог </h2>
-            <MainCatalog />
+            <CatalogCategories />
+            <ListCatalog />
+            <LoadItemsMoreCatalog />
           </section>
         </div>
       </div>

@@ -1,11 +1,17 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { customApi } from "./API/customApi";
-import mainSlice from "./mainSlice";
+import {
+  configureStore
+} from "@reduxjs/toolkit";
+import {
+  customApi
+} from "./API/customApi";
+import catalogSlice from "./catalogSlice";
+import searchSlice from "./searchSlice";
 
 export const store = configureStore({
   reducer: {
     [customApi.reducerPath]: customApi.reducer,
-    mainSlice: mainSlice,
+    catalogSlice: catalogSlice,
+    searchSlice: searchSlice,
   },
 
   middleware: (getDefaultMiddleware) =>

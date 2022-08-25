@@ -3,10 +3,7 @@ import { useGetTopSalesQuery } from "../../Store/API/customApi";
 import Loader from "../Loader/Loader";
 
 export default function TopSales() {
-  const { data, isLoading, isSuccess } =
-    useGetTopSalesQuery("");
- 
-
+  const { data, isLoading, isSuccess } = useGetTopSalesQuery("");
   const TopSalesItem = () => {
     return (
       <div className="row">

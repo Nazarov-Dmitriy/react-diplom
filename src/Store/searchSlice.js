@@ -4,10 +4,9 @@ import {
 
 const initialState = {
   input: "",
-  inputHeader: "",
   searchFlag: false,
-  searchData: [],
-  searchUrl: '',
+  inputFlag: false,
+  inputHeader: "",
   searchHeader: false,
   searchFocusFlag: false,
 };
@@ -20,29 +19,21 @@ export const searchSlice = createSlice({
       state.input = action.payload;
       state.searchFlag = true;
     },
+    addInputFlag: (state, action) => {
+      state.inputFlag = action.payload;
+    },
+    removeSeachFlag: (state, ) => {
+      state.searchFlag = false;
+      state.input = '';
+    },
     addInputHeader: (state, action) => {
       state.inputHeader = action.payload;
     },
     searchHeaderFlag: (state, action) => {
       state.searchHeader = action.payload;
     },
-    addSearchUrl: (state, action) => {
-      state.searchUrl = action.payload;
-    },
-    addSearchFocusFlag: (state,action) => {
+    addSearchFocusFlag: (state, action) => {
       state.searchFocusFlag = action.payload;
-    },
-    removeSeachFlag: (state, ) => {
-      state.searchFlag = false;
-      state.input = '';
-    },
-
-    addSeachData: (state, action) => {
-      if (action.payload.catalogId !== action.payload.loadIdCatagory) {
-        state.searchData = ([...action.payload.data]);
-      } else {
-        state.searchData = ([...state.searchData, ...action.payload.data]);
-      }
     },
   },
 });
@@ -50,11 +41,13 @@ export const searchSlice = createSlice({
 export const {
   addInput,
   removeSeachFlag,
-  addSearchUrl,
-  addSeachData,
-  searchHeaderFlag,
+  addInputFlag,
   addInputHeader,
-  addSearchFocusFlag
+  searchHeaderFlag,
+  addSearchFocusFlag,
+  // addSearchUrl,
+  // addSeachData,
+  // removeSeachData
 } = searchSlice.actions;
 
 export const search = (state) => state.searchSlice;

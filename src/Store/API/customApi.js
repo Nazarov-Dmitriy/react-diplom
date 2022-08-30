@@ -1,8 +1,11 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import {
+  createApi,
+  fetchBaseQuery
+} from "@reduxjs/toolkit/query/react";
 
 export const customApi = createApi({
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:7070/api/",
+    baseUrl: process.env.REACT_APP_URL,
   }),
   endpoints: (builder) => ({
     getTopSales: builder.query({
@@ -25,6 +28,11 @@ export const customApi = createApi({
         url: url,
       }),
     }),
+    getProduc: builder.query({
+      query: (url) => ({
+        url: url,
+      }),
+    }),
   }),
 });
 
@@ -33,4 +41,5 @@ export const {
   useGetCategoriesQuery,
   useGetCatalogItemsQuery,
   useGetSearchItemsQuery,
+  useGetProducQuery,
 } = customApi;

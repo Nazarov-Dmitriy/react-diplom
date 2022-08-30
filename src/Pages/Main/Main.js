@@ -1,8 +1,8 @@
 import React from "react";
 import TopSales from "./TopSales";
-import CatalogCategories from "../../components/CatalogCategories";
-import ListCatalog from "../../components/ListCatalog";
-import LoadItemsMoreCatalog from "../../components/LoadItemsMoreCatalog";
+import CatalogCategories from "../../components/categories/CatalogCategories";
+import ListCatalog from "../../components/catalog/ListCatalog";
+import LoadItemsMoreCatalog from "../../components/catalog/LoadItemsMoreCatalog";
 
 export default function Main() {
   return (

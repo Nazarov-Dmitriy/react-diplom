@@ -1,10 +1,6 @@
 import React, { createRef } from "react";
 import { Link } from "react-router-dom";
-import {
-  cancelDoubleLoading,
-  addUrlCatalog,
-  addId,
-} from "../../Store/catalogSlice";
+import { cancelDoubleLoading } from "../../Store/catalogSlice";
 import {
   searchHeaderFlag,
   search,
@@ -12,26 +8,36 @@ import {
   addSearchFocusFlag,
 } from "../../Store/searchSlice";
 import { useDispatch, useSelector } from "react-redux";
+import {
+  addhiddenButtonLoadMore,
+  addButtonFlagSearch,
+} from "../../Store/hiddenButtonLoaded";
 import { useNavigate } from "react-router-dom";
 
 export default function Header() {
   const dispatch = useDispatch();
   const handleCancelDoubleLoading = () => {
     dispatch(cancelDoubleLoading(true));
-    dispatch(addUrlCatalog("http://localhost:7070/api/items"));
-    dispatch(addId("All"));
+    dispatch(addhiddenButtonLoadMore(false));
+    dispatch(addButtonFlagSearch(false));
   };
-  const { searchHeader, inputHeader } = useSelector(search);
-  const navigate = useNavigate();
   const ref = createRef();
   const refInput = createRef();
+  const { searchHeader } = useSelector(search);
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    dispatch(addInputHeader(e.target.value.trim()));
+    e.target.value !== ""
+      ? dispatch(searchHeaderFlag(true))
+      : dispatch(searchHeaderFlag(false));
+  };
 
   const handleShowSearch = (e) => {
     ref.current.classList.remove("invisible");
     refInput.current.focus();
-    dispatch(searchHeaderFlag(true));
 
-    if (inputHeader.trim() !== "" && searchHeader) {
+    if (searchHeader) {
       ref.current.classList.add("invisible");
       navigate(`/catalog`);
       e.target.parentElement.parentElement.children[1][0].value = "";
@@ -43,10 +49,6 @@ export default function Header() {
     if (e.target.value === "") {
       ref.current.classList.add("invisible");
     }
-  };
-
-  const handleChange = (e) => {
-    dispatch(addInputHeader(e.target.value));
   };
 
   return (
@@ -88,7 +90,6 @@ export default function Header() {
                     to="/about"
                     className="nav-link"
                     activeclassname="active"
-                    onClick={handleCancelDoubleLoading}
                   >
                     О магазине
                   </Link>
@@ -98,7 +99,6 @@ export default function Header() {
                     to="/contacts"
                     className="nav-link"
                     activeclassname="active"
-                    onClick={handleCancelDoubleLoading}
                   >
                     Контакты
                   </Link>

@@ -3,66 +3,97 @@ import {
 } from '@reduxjs/toolkit';
 
 const initialState = {
-  id: 'All',
-  url: 'http://localhost:7070/api/items',
+  listCategory: [],
   changeId: false,
-  hiddenButtonLoadMore: false,
-  cancelDoubleLoading: false,
-  data: [],
-  loadCategory: "",
-  count: "0",
+  idCategory: 'All',
+  url: 'http://localhost:7070/api/items',
+  dataCatalog: [],
+  count: 6,
+  cancelDoubleLoadingFlag: false,
+  firstLoadArr: true,
 };
 
 export const catalogSlice = createSlice({
   name: 'catalogSlice',
   initialState,
   reducers: {
+    addlistCategory: (state, action) => {
+      state.listCategory = [action.payload.all, ...action.payload.data]
+    },
     addId: (state, action) => {
-      if (state.id !== action.payload) {
+      if (state.idCategory !== action.payload) {
         state.changeId = true;
       }
-      state.id = action.payload;
-      state.count = 0;
-      state.loadCategory = '';
+      state.idCategory = action.payload;
+      state.count = 6;
+      state.firstLoadArr = true;
+
     },
     addUrlCatalog: (state, action) => {
-      state.url = action.payload;
-    },
-    hiddenButtonLoadMore: (state, action) => {
-      state.hiddenButtonLoadMore = action.payload;
-    },
-    cancelDoubleLoading: (state, action) => {
-      state.cancelDoubleLoading = action.payload;
+
+      if (action.payload.buttonFlag && !action.payload.searchFlag) {
+        if (state.idCategory !== "All") {
+          state.url = `items?categoryId=${state.idCategory}&offset=${state.count}`;
+        } else {
+          state.url = `items?offset=${state.count}`;
+        }
+        state.count = state.count + 6;
+
+      } else if (action.payload.searchFlag && !action.payload.buttonFlagSearch) {
+
+        if (state.idCategory !== "All") {
+          state.url = `items?categoryId=${state.idCategory}&q=${action.payload.input}`
+        } else {
+          state.url = `items?q=${action.payload.input}`;
+        }
+        state.firstLoadArr = true;
+
+      } else if (action.payload.searchFlag && action.payload.buttonFlagSearch) {
+        state.firstLoadArr = false;
+
+        if (state.idCategory !== "All") {
+        state.url = `items?categoryId=${state.idCategory}&offset=${state.count}&q=${action.payload.input}`
+          state.count = state.count + 6;
+
+        } else {
+          state.url = `items?offset=${state.count}&q=${action.payload.input}`;
+          state.count = state.count + 6;
+        }
+      } else {
+        if (state.idCategory !== "All") {
+          state.url = `items?categoryId=${state.idCategory}`;
+        } else {
+          state.url = `items`;
+        }
+        state.firstLoadArr = true;
+
+      }
     },
     addData: (state, action) => {
-      if (state.id !== state.loadCategory) {
-        state.data = ([...action.payload]);
+      if (state.firstLoadArr) {
+        state.dataCatalog = ([...action.payload.data]);
+        state.changeId = false;
+        state.firstLoadArr = false;
       } else {
-        state.data = ([...state.data, ...action.payload]);
+        state.dataCatalog = ([...state.dataCatalog, ...action.payload.data]);
       }
     },
-    loadMoreItems: (state) => {
-      if (state.loadCategory !== state.id || state.changeId) {
-        state.changeId = false;
-        state.loadCategory = state.id
-        state.count = 6
-      } else {
-        state.count = state.count + 6
+    cancelDoubleLoading: (state, action) => {
+      state.cancelDoubleLoadingFlag = action.payload;
+      if (state.action.payload) {
+        state.dataCatalog = [];
       }
-    }
+    },
+
   },
 });
 
-
 export const {
   addId,
+  addlistCategory,
   addUrlCatalog,
-  hiddenButtonLoadMore,
-  isLoadingCategory,
-  isLoadingCatalog,
-  cancelDoubleLoading,
   addData,
-  loadMoreItems
+  cancelDoubleLoading,
 } = catalogSlice.actions;
 
 export const selectId = (state) => state;

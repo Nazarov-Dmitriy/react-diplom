@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useGetProducQuery } from "../../Store/API/customApi";
 import { useNavigate, useParams } from "react-router-dom";
 import Loader from "../Loader/Loader";
+import { addProduct } from "../../Store/cartSlice";
+import { useDispatch } from "react-redux";
 
 export default function Product() {
   const { id } = useParams();
@@ -10,17 +12,18 @@ export default function Product() {
   const [countArr, setCount] = useState({
     flag: false,
     count: 1,
+    size: "",
   });
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  console.log(countArr);
   useEffect(() => {
     setProductArr(data);
   }, [data]);
 
   const handleSelected = (size, e) => {
     e.preventDefault();
-    setCount({ ...countArr, flag: true });
+    setCount({ ...countArr, flag: true, size: size });
     setProductArr((prevActive) => ({
       ...prevActive,
       sizes: prevActive.sizes.map((o) => {
@@ -30,9 +33,29 @@ export default function Product() {
   };
 
   const handleGoCart = (e) => {
-    e.preventDefault();
     if (countArr.flag) {
-      navigate("/cart");
+      e.preventDefault();
+      dispatch(addProduct());
+      if (countArr.flag) {
+        navigate("/cart");
+      }
+      let countLocal = countArr.count;
+
+      if (localStorage.getItem(`${id}${countArr.size}`)) {
+        const local = JSON.parse(localStorage.getItem(`${id}${countArr.size}`));
+        countLocal += local.count;
+      }
+
+      localStorage.setItem(
+        `${id}${countArr.size}`,
+        JSON.stringify({
+          title: productArr.title,
+          price: productArr.price,
+          size: countArr.size,
+          count: countLocal,
+          id: +id,
+        })
+      );
     }
   };
 
@@ -115,8 +138,6 @@ export default function Product() {
                     <p>
                       Размеры в наличии:
                       {productArr.sizes.map((item) => {
-                        console.log(item);
-
                         return item.avalible ? (
                           <span
                             key={item.size}

@@ -52,7 +52,7 @@ export const catalogSlice = createSlice({
         state.firstLoadArr = false;
 
         if (state.idCategory !== "All") {
-        state.url = `items?categoryId=${state.idCategory}&offset=${state.count}&q=${action.payload.input}`
+          state.url = `items?categoryId=${state.idCategory}&offset=${state.count}&q=${action.payload.input}`
           state.count = state.count + 6;
 
         } else {
@@ -79,9 +79,11 @@ export const catalogSlice = createSlice({
       }
     },
     cancelDoubleLoading: (state, action) => {
-      state.cancelDoubleLoadingFlag = action.payload;
-      if (state.action.payload) {
-        state.dataCatalog = [];
+      if (action.payload !== undefined) {
+        state.cancelDoubleLoadingFlag = action.payload;
+        if (state.action.payload) {
+          state.dataCatalog = [];
+        }
       }
     },
 

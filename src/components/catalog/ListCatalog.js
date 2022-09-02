@@ -16,12 +16,11 @@ import Loader from "../../Pages/Loader/Loader";
 export default function ListCatalog() {
   const dispatch = useDispatch();
   const {
-    catalogSlice: { cancelDoubleLoadingFlag, changeId, url },
+    catalogSlice: { cancelDoubleLoadingFlag, changeId, url, dataCatalog },
   } = useSelector(selectId);
   const { input, searchFlag, inputFlag } = useSelector(search);
-  const { data, isLoading } = useGetCatalogItemsQuery(url);
-  const { buttonFlag,  buttonFlagSearch } =
-    useSelector(hiddenButtonState);
+  const { data, isLoading, status } = useGetCatalogItemsQuery(url);
+  const { buttonFlag, buttonFlagSearch } = useSelector(hiddenButtonState);
 
   useEffect(() => {
     if (changeId) {
@@ -83,9 +82,12 @@ export default function ListCatalog() {
     }
   }, [data, dispatch, cancelDoubleLoadingFlag]);
 
+  console.log(isLoading);
+
   return (
     <>
       <div className="row"> {isLoading ? <Loader /> : <ItemsCatalog />} </div>
+      {dataCatalog.length > 0 && status === "pending" && <Loader />}
     </>
   );
 }

@@ -13,6 +13,7 @@ import {
   addButtonFlagSearch,
 } from "../../Store/hiddenButtonLoaded";
 import { useNavigate } from "react-router-dom";
+import { cart } from "../../Store/cartSlice";
 
 export default function Header() {
   const dispatch = useDispatch();
@@ -24,6 +25,7 @@ export default function Header() {
   const ref = createRef();
   const refInput = createRef();
   const { searchHeader } = useSelector(search);
+  const { countProduct } = useSelector(cart);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -111,9 +113,12 @@ export default function Header() {
                     className="header-controls-pic header-controls-search"
                     onClick={handleShowSearch}
                   ></div>
-                  {/* Do programmatic navigation on click to /cart.html  */}
-                  <div className="header-controls-pic header-controls-cart">
-                    <div className="header-controls-cart-full">2</div>
+                  <div className="header-controls-pic header-controls-cart" onClick={()=>navigate('/cart')}>
+                    {countProduct > 0 && (
+                      <div className="header-controls-cart-full">
+                        {countProduct > 0 ? countProduct : null}
+                      </div>
+                    )}
                     <div className="header-controls-cart-menu"></div>
                   </div>
                 </div>

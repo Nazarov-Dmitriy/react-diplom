@@ -44,10 +44,7 @@ export const {
   addInputFlag,
   addInputHeader,
   searchHeaderFlag,
-  addSearchFocusFlag,
-  // addSearchUrl,
-  // addSeachData,
-  // removeSeachData
+  addSearchFocusFlag,  
 } = searchSlice.actions;
 
 export const search = (state) => state.searchSlice;
